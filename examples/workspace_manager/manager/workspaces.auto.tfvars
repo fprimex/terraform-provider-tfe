@@ -19,58 +19,70 @@
 
 workspaces = {
   ws1 = {
-    a_string = {
-      value = "val1"
+    auto_apply = false
+
+    vcs_repo = {
+      branch = "develop"
     }
 
-    a_number = {
-      value = 3.14
-    }
+    vars = {
+      a_string = {
+        value = "val1"
+      }
 
-    a_list = {
-      value = <<-EOT
-        [
-          "one",
-          "two",
-        ]
-      EOT
-      hcl = true
-    }
+      a_number = {
+        value = 3.14
+      }
 
-    a_map = {
-      value = <<-EOT
-        {
-          foo = "bar"
-          baz = "qux"
-        }
-      EOT
-      hcl = true
-    }
+      a_list = {
+        value = <<-EOT
+          [
+            "one",
+            "two",
+          ]
+        EOT
+        hcl = true
+      }
 
-    an_env = {
-      value = "an env var"
-      category = "env"
+      a_map = {
+        value = <<-EOT
+          {
+            foo = "bar"
+            baz = "qux"
+          }
+        EOT
+        hcl = true
+      }
+
+      an_env = {
+        value = "an env var"
+        category = "env"
+      }
     }
   }
 
   ws2 = {
-    a_number = {
-      value = 6.28
-    }
+    working_directory = "foo/bar"
 
-    a_map = {
-      value = <<-EOT
-        {
-          foo = "bar"
-          baz = "qux"
-        }
-      EOT
-      hcl = true
-    }
+    vars = {
+      a_number = {
+        value = 6.28
+      }
 
-    another_env = {
-      value = "another env var"
-      category = "env"
+      a_map = {
+        value = <<-EOT
+          {
+            foo = "bar"
+            baz = "qux"
+          }
+        EOT
+        hcl = true
+      }
+
+      another_env = {
+        value = "another env var"
+        category = "env"
+      }
     }
   }
 }

@@ -74,8 +74,8 @@ locals {
   # represents a workspace variable that needs to be set, and each value
   # contains all of the information required to manage that workspace variable.
   ws_variables = flatten([
-    for ws_name, variables in var.workspaces : [
-      for var_name, var_attrs in merge(variables, lookup(var.addtl_vars, ws_name, {})) : {
+    for ws_name, ws_attrs in var.workspaces : [
+      for var_name, var_attrs in merge(ws_attrs["vars"], lookup(var.addtl_vars, ws_name, {})) : {
         ws            = ws_name
         var_key       = var_name
         var_value     = var_attrs["value"]
@@ -103,11 +103,22 @@ resource "tfe_workspace" "managed_ws" {
   for_each = var.workspaces
 
   name = "${var.vcs_repo}-${each.key}"
-  organization = var.org
+  organization = try(each.value["organization"], var.org)
+
+  auto_apply            = try(each.value["auto_apply"],            null)
+  file_triggers_enabled = try(each.value["file_triggers_enabled"], null)
+  operations            = try(each.value["operations"],            null)
+  queue_all_runs        = try(each.value["queue_all_runs"],        null)
+  ssh_key_id            = try(each.value["ssh_key_id"],            null)
+  terraform_version     = try(each.value["terraform_version"],     null)
+  trigger_prefixes      = try(each.value["trigger_prefixes"],      null)
+  working_directory     = try(each.value["working_directory"],     null)
 
   vcs_repo {
-    identifier = "${var.vcs_org}/${var.vcs_repo}"
     oauth_token_id = tfe_oauth_client.gh.oauth_token_id
+    identifier = "${var.vcs_org}/${var.vcs_repo}"
+    branch = try(each.value["vcs_repo"]["branch"], null)
+    ingress_submodules = try(each.value["vcs_repo"]["ingress_submodules"], null)
   }
 }
 
