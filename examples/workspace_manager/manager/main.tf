@@ -75,7 +75,7 @@ locals {
   # contains all of the information required to manage that workspace variable.
   ws_variables = flatten([
     for ws_name, ws_attrs in var.workspaces : [
-      for var_name, var_attrs in merge(ws_attrs["vars"], lookup(var.addtl_vars, ws_name, {})) : {
+      for var_name, var_attrs in merge(lookup(ws_attrs, "vars", {}), lookup(var.addtl_vars, ws_name, {})) : {
         ws            = ws_name
         var_key       = var_name
         var_value     = var_attrs["value"]
